@@ -58,11 +58,9 @@ async function createPost() {
     const imagesInput = document.getElementById("post-images");
     const formData = new FormData();
 
-    // Add title and content to the form data
     formData.append("title", title);
     formData.append("content", content);
 
-    // Add images to the form data
     Array.from(imagesInput.files).forEach((file) => {
         formData.append("files", file);
     });
@@ -77,9 +75,7 @@ async function createPost() {
         if (!response.ok) throw new Error("Failed to create post");
 
         alert("Post created successfully!");
-        // Reset the form
         document.getElementById("create-post-form").reset();
-        // Switch to the posts list view
         showViewPosts();
     } catch (error) {
         alert(error.message);
@@ -113,8 +109,8 @@ async function deletePost(postId) {
         if (!response.ok) throw new Error("Failed to delete post");
 
         alert("Post deleted successfully!");
-        showViewPosts(); // 게시물을 삭제한 후 목록으로 돌아감
-        fetchPosts(); // 삭제 후 목록 새로고침
+        showViewPosts();
+        fetchPosts();
     } catch (error) {
         alert(error.message);
     }
@@ -124,7 +120,7 @@ async function deletePost(postId) {
 document.getElementById("delete-post-button").addEventListener("click", () => {
     const postId = document.getElementById("post-title").dataset.postId;
     if (confirm("Are you sure you want to delete this post?")) {
-        deletePost(postId); // 삭제 함수 호출
+        deletePost(postId);
     }
 });
 
@@ -158,14 +154,14 @@ async function viewPostDetail(postId) {
         unlikeButton.onclick = () => unlikePost(postId);
 
         const imagesContainer = document.getElementById("load-post-images");
-        imagesContainer.innerHTML = ""; // Clear existing images
+        imagesContainer.innerHTML = "";
         if (post.imagePaths && post.imagePaths.length > 0) {
             console.log(post.imagePaths)
             post.imagePaths.forEach((imagePath) => {
                 const imgElement = document.createElement("img");
-                imgElement.src = imagePath; // Use the path returned by the backend
+                imgElement.src = imagePath;
                 imgElement.alt = "Post Image";
-                imgElement.style.maxWidth = "20%"; // Adjust styling as needed
+                imgElement.style.maxWidth = "20%";
                 imagesContainer.appendChild(imgElement);
             });
         } else {
@@ -189,10 +185,9 @@ function renderComments(comments) {
     const commentsList = document.getElementById("post-comments");
     commentsList.innerHTML = "";
 
-    // Helper function to render nested comments up to 3 levels
     const renderComment = (comment, level = 0) => {
         const listItem = document.createElement("li");
-        listItem.style.marginLeft = `${level * 20}px`; // Indentation for nested replies
+        listItem.style.marginLeft = `${level * 20}px`;
 
         listItem.innerHTML = `
             <span>${comment.author.nickname}: </span>
@@ -217,30 +212,22 @@ function renderComments(comments) {
 
         commentsList.appendChild(listItem);
 
-        // Render children if they exist and level is less than 3
         if (comment.children && comment.children.length > 0 && level < 2) {
             comment.children.forEach(reply => renderComment(reply, level + 1));
         }
     };
 
-    // Render all top-level comments
     comments.forEach(comment => renderComment(comment));
 }
 
-
-
-
-// Show reply form
 function showReplyForm(commentId) {
     document.getElementById(`reply-form-${commentId}`).style.display = "block";
 }
 
-// Hide reply form
 function hideReplyForm(commentId) {
     document.getElementById(`reply-form-${commentId}`).style.display = "none";
 }
 
-// Submit reply
 async function submitReply(event, parentId, level = 0) {
     event.preventDefault();
 
@@ -263,14 +250,12 @@ async function submitReply(event, parentId, level = 0) {
         if (!response.ok) throw new Error("Failed to post reply");
 
         alert("Reply added!");
-        viewPostDetail(postId); // Refresh post details
+        viewPostDetail(postId);
     } catch (error) {
         alert(error.message);
     }
 }
 
-
-// Show edit comment form
 function showEditCommentForm(commentId, currentContent) {
     document.getElementById(`comment-content-${commentId}`).style.display = "none";
     document.getElementById(`edit-comment-form-${commentId}`).style.display = "block";
@@ -336,32 +321,12 @@ async function deleteComment(commentId) {
         if (!response.ok) throw new Error("Failed to delete comment");
 
         alert("Comment deleted successfully!");
-        // 댓글 삭제 후 댓글 목록 새로고침
+
         const postId = document.getElementById("post-title").dataset.postId;
         viewPostDetail(postId);
     } catch (error) {
         alert(error.message);
     }
-}
-
-
-// Show edit comment form
-function showEditCommentForm(commentId, currentContent) {
-    document.getElementById(`comment-content-${commentId}`).style.display = "none";
-    document.getElementById(`edit-comment-form-${commentId}`).style.display = "block";
-}
-
-// Hide edit comment form
-function hideEditCommentForm(commentId) {
-    document.getElementById(`comment-content-${commentId}`).style.display = "inline";
-    document.getElementById(`edit-comment-form-${commentId}`).style.display = "none";
-}
-
-// Submit edit comment form
-function submitEditComment(event, commentId) {
-    event.preventDefault();
-    const updatedContent = document.getElementById(`edit-comment-input-${commentId}`).value;
-    updateComment(commentId, updatedContent); // 수정 요청
 }
 
 // Update a comment
@@ -377,7 +342,7 @@ async function updateComment(commentId, updatedContent) {
         if (!response.ok) throw new Error("Failed to update comment");
 
         alert("Comment updated successfully!");
-        // 댓글 수정 후 댓글 목록 새로고침
+
         const postId = document.getElementById("post-title").dataset.postId;
         viewPostDetail(postId);
     } catch (error) {
@@ -508,7 +473,6 @@ function calculateSmokingDuration(startedAt) {
     const currentYear = currentDate.getFullYear();
     const currentMonth = currentDate.getMonth(); // 0-based index
 
-    // 총 개월 수 계산
     const totalMonths = (currentYear - startYear) * 12 + (currentMonth - startMonth);
 
     return totalMonths >= 0 ? `흡연 ${totalMonths} 개월 차` : "Invalid date";

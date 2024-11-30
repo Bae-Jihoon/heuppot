@@ -23,7 +23,7 @@ function initMap() {
         alert(`Selected Coordinates: ${lat}, ${lng}`);
     });
 
-    fetchSpots(); // 초기 스팟 목록 로드
+    fetchSpots();
 
     // 검색 버튼 이벤트 리스너
     document.getElementById("search-button").addEventListener("click", () => {
@@ -46,14 +46,12 @@ async function searchSpots(keyword) {
         });
         const spots = await response.json();
 
-        // 기존 마커 초기화
         clearMarkers();
         displaySpots(spots);
     } catch (error) {
         console.error("Failed to search spots:", error);
     }
 }
-
 
 // 기존 마커 제거
 function clearMarkers() {
