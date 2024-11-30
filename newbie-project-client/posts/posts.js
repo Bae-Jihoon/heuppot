@@ -184,13 +184,15 @@ async function viewPostDetail(postId) {
     }
 }
 
-// Render comments with like/unlike functionality
+// Render comments with reply, edit, delete functionality
 function renderComments(comments) {
     const commentsList = document.getElementById("post-comments");
     commentsList.innerHTML = "";
 
-    comments.forEach(comment => {
+    // Helper function to render nested comments up to 3 levels
+    const renderComment = (comment, level = 0) => {
         const listItem = document.createElement("li");
+        listItem.style.marginLeft = `${level * 20}px`; // Indentation for nested replies
 
         listItem.innerHTML = `
             <span>${comment.author.nickname}: </span>
@@ -198,16 +200,93 @@ function renderComments(comments) {
             <p>Likes: <span id="comment-likes-${comment.id}">${comment.likenum}</span></p>
             <button onclick="likeComment(${comment.id})">Like</button>
             <button onclick="unlikeComment(${comment.id})">Unlike</button>
+            <button onclick="showReplyForm(${comment.id}, ${level})">Reply</button>
             <button onclick="showEditCommentForm(${comment.id}, '${comment.content}')">Edit</button>
             <button onclick="deleteComment(${comment.id})">Delete</button>
+            <form id="reply-form-${comment.id}" style="display: none;" onsubmit="submitReply(event, ${comment.id}, ${level + 1})">
+                <textarea id="reply-content-${comment.id}" placeholder="Write a reply..." required></textarea>
+                <button type="submit">Post Reply</button>
+                <button type="button" onclick="hideReplyForm(${comment.id})">Cancel</button>
+            </form>
             <form id="edit-comment-form-${comment.id}" style="display: none;" onsubmit="submitEditComment(event, ${comment.id})">
                 <input type="text" id="edit-comment-input-${comment.id}" value="${comment.content}" required>
                 <button type="submit">Save</button>
                 <button type="button" onclick="hideEditCommentForm(${comment.id})">Cancel</button>
             </form>
         `;
+
         commentsList.appendChild(listItem);
-    });
+
+        // Render children if they exist and level is less than 3
+        if (comment.children && comment.children.length > 0 && level < 2) {
+            comment.children.forEach(reply => renderComment(reply, level + 1));
+        }
+    };
+
+    // Render all top-level comments
+    comments.forEach(comment => renderComment(comment));
+}
+
+
+
+
+// Show reply form
+function showReplyForm(commentId) {
+    document.getElementById(`reply-form-${commentId}`).style.display = "block";
+}
+
+// Hide reply form
+function hideReplyForm(commentId) {
+    document.getElementById(`reply-form-${commentId}`).style.display = "none";
+}
+
+// Submit reply
+async function submitReply(event, parentId, level = 0) {
+    event.preventDefault();
+
+    if (level >= 3) {
+        alert("Replies are limited to 3 levels.");
+        return;
+    }
+
+    const postId = document.getElementById("post-title").dataset.postId;
+    const content = document.getElementById(`reply-content-${parentId}`).value;
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/${postId}/comments`, {
+            method: "POST",
+            credentials: "include",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ content, parentId }),
+        });
+
+        if (!response.ok) throw new Error("Failed to post reply");
+
+        alert("Reply added!");
+        viewPostDetail(postId); // Refresh post details
+    } catch (error) {
+        alert(error.message);
+    }
+}
+
+
+// Show edit comment form
+function showEditCommentForm(commentId, currentContent) {
+    document.getElementById(`comment-content-${commentId}`).style.display = "none";
+    document.getElementById(`edit-comment-form-${commentId}`).style.display = "block";
+}
+
+// Hide edit comment form
+function hideEditCommentForm(commentId) {
+    document.getElementById(`comment-content-${commentId}`).style.display = "inline";
+    document.getElementById(`edit-comment-form-${commentId}`).style.display = "none";
+}
+
+// Submit edit comment form
+function submitEditComment(event, commentId) {
+    event.preventDefault();
+    const updatedContent = document.getElementById(`edit-comment-input-${commentId}`).value;
+    updateComment(commentId, updatedContent);
 }
 
 // Like a comment
