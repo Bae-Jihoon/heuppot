@@ -1,4 +1,4 @@
-const API_BASE_URL = "/auth";
+const API_BASE_URL = "http://localhost:8000/auth";
 
 // 메시지 표시 함수
 function showMessage(message) {

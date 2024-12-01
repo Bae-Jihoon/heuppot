@@ -1,4 +1,4 @@
-const API_BASE_URL = "/posts";
+const API_BASE_URL = "http://localhost:8000/posts";
 
 let currentPage = 1;
 const pageSize = 10;

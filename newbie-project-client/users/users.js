@@ -1,4 +1,4 @@
-const API_BASE_URL = "/users";
+const API_BASE_URL = "http://localhost:8000/users";
 
 // 메시지 표시 함수
 function showMessage(message) {
@@ -8,7 +8,7 @@ function showMessage(message) {
 // 사용자 정보 가져오기
 async function fetchUserInfo() {
     try {
-        const response = await fetch(API_BASE_URL, { credentials: "include" });
+        const response = await fetch(`${API_BASE_URL}`, { credentials: "include" });
         if (!response.ok) throw new Error("Failed to fetch user information");
 
         const user = await response.json();
@@ -51,7 +51,7 @@ document.getElementById("edit-user-form").addEventListener("submit", async (e) =
     const startedAt = document.getElementById("edit-started-at").value;
 
     try {
-        const response = await fetch(API_BASE_URL, {
+        const response = await fetch(`${API_BASE_URL}`, {
             method: "PUT",
             credentials: "include",
             headers: { "Content-Type": "application/json" },
