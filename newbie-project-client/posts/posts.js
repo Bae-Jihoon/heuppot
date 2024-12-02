@@ -1,4 +1,4 @@
-const API_BASE_URL = "http://localhost:8000/posts";
+const API_BASE_URL = "https://badge-api.newbies.sparcs.org/posts";
 
 let currentPage = 1;
 const pageSize = 10;

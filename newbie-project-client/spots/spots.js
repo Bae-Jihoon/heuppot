@@ -1,4 +1,4 @@
-const API_BASE_URL = "http://localhost:8000/spots";
+const API_BASE_URL = "https://badge-api.newbies.sparcs.org/spots";
 
 let map;
 let markers = []; // Array to keep track of all markers

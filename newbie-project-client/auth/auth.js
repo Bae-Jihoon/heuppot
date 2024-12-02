@@ -1,4 +1,4 @@
-const API_BASE_URL = "http://localhost:8000/auth";
+const API_BASE_URL = "https://badge-api.newbies.sparcs.org/auth";
 
 // 메시지 표시 함수
 function showMessage(message) {

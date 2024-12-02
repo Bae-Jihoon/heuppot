@@ -31,12 +31,12 @@ services:
     image: mysql:8.0
     container_name: newbie_prod
     environment:
-      MYSQL_ROOT_PASSWORD: prod_password
-      MYSQL_DATABASE: prod_db
-      MYSQL_USER: prod_user
-      MYSQL_PASSWORD: prod_password
+      MYSQL_ROOT_PASSWORD: tnfqkrtm
+      MYSQL_DATABASE: db
+      MYSQL_USER: root
+      MYSQL_PASSWORD: tnfqkrtm
     ports:
-      - "3309:3306"  # Prod DB 포트 매핑
+      - "3306:3306"  # Prod DB 포트 매핑
     volumes:
       - mysql_prod_data:/var/lib/mysql
 
