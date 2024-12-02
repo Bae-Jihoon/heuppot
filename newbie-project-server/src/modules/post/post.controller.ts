@@ -83,7 +83,7 @@ export class PostController {
     ) {
         const { title, content } = postData;
         const userId = Number(user.userId)
-
+        console.error("here", title);
         const filePaths = files
             ? await Promise.all(files.map(file => this.s3Service.uploadFile(file)))
             : [];
