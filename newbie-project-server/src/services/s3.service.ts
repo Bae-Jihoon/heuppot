@@ -17,6 +17,7 @@ export class S3Service {
             },
         });
         this.bucketName = this.configService.get<string>('AWS_S3_BUCKET_NAME');
+        console.log(this.bucketName);
     }
 
     async uploadFile(file: Express.Multer.File): Promise<string> {
@@ -29,7 +30,10 @@ export class S3Service {
             ContentType: file.mimetype,
         };
 
-        await this.s3.send(new PutObjectCommand(uploadParams));
+        try {
+            await this.s3.send(new PutObjectCommand(uploadParams));
+        } catch (e) {console.error(e)}
+        //await this.s3.send(new PutObjectCommand(uploadParams));
 
         return `https://${this.bucketName}.s3.${this.configService.get<string>(
             'AWS_REGION',
