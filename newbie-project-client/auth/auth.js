@@ -27,7 +27,7 @@ document.getElementById("register-form").addEventListener("submit", async (event
         const response = await fetch(`${API_BASE_URL}/register`, {
             method: "POST",
             credentials: "include",
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*"},
             body: JSON.stringify({ email, nickname, password }),
         });
 

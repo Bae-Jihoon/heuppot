@@ -28,10 +28,9 @@ export class AuthController {
     const { access_token } = await this.authService.login(email, password);
 
     response.cookie('access_token', access_token, {
-      httpOnly: false,
-      secure: false,
-      sameSite: 'lax',
-      path: '/'//나중에 수정
+      httpOnly: true,
+      secure: true,
+      sameSite: 'none',
     });
 
     return { message: 'Login successful' };
@@ -42,10 +41,9 @@ export class AuthController {
   @ApiOperation({ summary: 'Logout' })
   logout(@Res() res: Response) {
     res.clearCookie('access_token', {
-      httpOnly: false,
-      secure: false,
-      sameSite: 'lax',
-      path: '/' //나중에 수정
+      httpOnly: true,
+      secure: true,
+      sameSite: 'none',
     });
 
     return res.status(200).json({ message: 'Logout successful' });
