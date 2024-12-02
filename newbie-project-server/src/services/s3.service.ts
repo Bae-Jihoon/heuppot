@@ -29,7 +29,7 @@ export class S3Service {
             Body: file.buffer,
             ContentType: file.mimetype,
         };
-
+        console.error("ddd",JSON.stringify(uploadParams));
         try {
             await this.s3.send(new PutObjectCommand(uploadParams));
         } catch (e) {console.error(e)}
