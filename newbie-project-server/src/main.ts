@@ -36,11 +36,12 @@ async function bootstrap() {
 
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api-docs', app, document);
-
+  /*
   app.enableCors({
     origin: ['https://badge.newbies.sparcs.org', 'http://localhost:3000'], // 클라이언트 URL
     credentials: true, // 쿠키 등 허용
-  });
+  });*/
+  app.enableCors();
 
   await app.listen(process.env.PORT || 3000);
   console.log('PORT:', process.env.PORT || 3000);
