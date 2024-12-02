@@ -20,18 +20,15 @@ if (fs.existsSync(envFilePath)) {
 }
 
 async function bootstrap() {
-  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
-    cors: {
-      origin: "https://badge.newbies.sparcs.org",
-      credentials: true
-    }
-  }); // NestExpressApplication 사용
+  const app = await NestFactory.create<NestExpressApplication>(AppModule); // NestExpressApplication 사용
   console.log("cors");
 
-  /*app.enableCors({
+  app.enableCors({
     origin: ['https://badge.newbies.sparcs.org', 'http://localhost:3000'], // 클라이언트 URL
     credentials: true, // 쿠키 등 허용
-  });*/
+    methods: ["GET","HEAD","PUT","PATCH","POST","DELETE","OPTIONS"]
+  });
+
   app.set('trust proxy', 1);
   // ValidationPipe 설정
   app.useGlobalPipes(new ValidationPipe({
