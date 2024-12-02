@@ -14,6 +14,7 @@ export class AuthController {
   @ApiOperation({ summary: 'Register user' })
   async register(@Body() createUserDto : CreateUserDto) {
     const { email, nickname, password } = createUserDto;
+    console.log(`${Date.now()}async register(): {email: ${email}, nickname: ${nickname}, password: ${password} }`);
     return this.authService.register(email, nickname, password);
   }
 

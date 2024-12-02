@@ -24,6 +24,7 @@ document.getElementById("register-form").addEventListener("submit", async (event
     }
 
     try {
+        console.log(`${Date.now()}await fetch(${API_BASE_URL}/register)`);
         const response = await fetch(`${API_BASE_URL}/register`, {
             method: "POST",
             credentials: "include",
