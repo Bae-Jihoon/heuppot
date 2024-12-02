@@ -22,7 +22,7 @@ if (fs.existsSync(envFilePath)) {
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     cors: {
-      origin: ["https://badge.newbies.sparcs.org"],
+      origin: "https://badge.newbies.sparcs.org",
       credentials: true
     }
   }); // NestExpressApplication 사용
