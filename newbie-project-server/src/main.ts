@@ -21,7 +21,7 @@ if (fs.existsSync(envFilePath)) {
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule); // NestExpressApplication 사용
-
+  app.set('trust proxy', 1);
   // ValidationPipe 설정
   app.useGlobalPipes(new ValidationPipe({
     transform: true
